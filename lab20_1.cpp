@@ -20,21 +20,64 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
-
+void importDataFromFile(const string filename,vector<string> &names,vector<int> &scores,vector<char> &grades){
+    ifstream A(filename);
+    string file;
+    int x,y,z;
+    char name[100];
+    int score;
+    while(getline(A,file)){
+        char format[] = "%[^:]: %d %d %d";
+        sscanf(file.c_str(),format,&name,&x,&y,&z);
+        names.push_back(name);
+        score = x+y+z;
+        scores.push_back(score);
+        grades.push_back(score2grade(score));
+    }
 }
 
-void getCommand(){
-
+void getCommand(string &command, string &key){
+    string a;
+    cout << "Please input your command: ";
+    cin >> command;
+    a = toUpperStr(command);
+    if(a == "GRADE" || a == "NAME" ){
+    cin.ignore();
+    getline(cin,key);
+}
 }
 
-void searchName(){
-
+void searchName(const vector<string>& names, const vector<int>& scores, const vector<char>& grades, const string& key){
+    bool found = false;
+    for (size_t i = 0; i < names.size(); ++i) {
+        if (toUpperStr(names[i]) == key) {
+            found = true;
+            cout << "---------------------------------\n";
+            cout << names[i] << "'s" << " score = " << scores[i] << "\n" << names[i] << "'s" << " grade = " << grades[i] << "\n";
+        }
+    }
+    if (!found) {
+        cout << "---------------------------------\n";
+        cout << "Cannot found." << "\n";
+    }   cout << "---------------------------------\n";
 }
 
-void searchGrade(){
-
+void searchGrade(const vector<string>& names, const vector<int>& scores, const vector<char>& grades, const string& key){
+    bool found = false;
+    char X = toupper(key[0]);
+    cout << "---------------------------------\n";
+    for (size_t i = 0; i < grades.size(); ++i) {
+        if (grades[i] == X) {
+            found = true;
+            cout << names[i] << " (" << scores[i] << ")"<< "\n";
+        }
+    }
+    if (!found) {
+        cout << "Cannot found.\n";
+    }
+    cout << "---------------------------------\n";
 }
+
 
 
 int main(){
